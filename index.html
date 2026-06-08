@@ -576,7 +576,7 @@ observer.observe(el);
 
 <div class="meta-box">
 <h3>🎯 Daily Quest</h3>
-<div class="small">Complete quiz or tasks for rewards</div>
+<div class="small">Complete quiz or task for reward</div>
 <button class="btn" onclick="quest()">Complete Quest</button>
 </div>
 
@@ -588,7 +588,30 @@ observer.observe(el);
 
 </div>
 
-<!-- ================= SCRIPT ================= -->
+<!-- ================= FOOTER ================= -->
+<footer>
+MGOT • Mindset Growth Optimization Token • Built on Solana • 2026
+</footer>
+
+<!-- ================= ANIMATION SCRIPT ================= -->
+<script>
+const elements = document.querySelectorAll('.card, .section-title, .wallet');
+
+const observer = new IntersectionObserver(entries => {
+entries.forEach(entry => {
+if(entry.isIntersecting){
+entry.target.classList.add('show');
+}
+});
+}, {threshold:0.1});
+
+elements.forEach(el => {
+el.classList.add('fade-in');
+observer.observe(el);
+});
+</script>
+
+<!-- ================= MGOT META HUB LOGIC ================= -->
 <script>
 let balance = 0;
 let xp = 0;
@@ -621,9 +644,6 @@ update();
 }
 
 update();
-</script>
-
-  
 </script>
 
 </body>

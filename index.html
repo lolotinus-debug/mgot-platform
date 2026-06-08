@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MGOT Platform</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif;}
+
+body{
+background:#020617;
+color:white;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+/* HERO */
+.hero{
+text-align:center;
+padding:60px 20px;
+}
+
+.hero h1{
+font-size:3rem;
+margin-bottom:10px;
+}
+
+.hero p{
+opacity:0.8;
+margin-bottom:20px;
+}
+
+.btn{
+padding:14px 22px;
+border:none;
+border-radius:12px;
+background:#22c55e;
+color:#000;
+font-weight:800;
+cursor:pointer;
+transition:.2s;
+}
+
+.btn:hover{transform:scale(1.05);}
+
+/* CARD */
+.card{
+max-width:900px;
+margin:20px auto;
+padding:25px;
+background:rgba(15,23,42,.95);
+border-radius:20px;
+border:1px solid rgba(255,255,255,.08);
+}
+
+.hidden{display:none;}
+
+/* QUIZ */
+.top{
+display:flex;
+justify-content:space-between;
+flex-wrap:wrap;
+gap:10px;
+margin-bottom:15px;
+}
+
+.top div{
+background:#0f172a;
+padding:8px 12px;
+border-radius:10px;
+}
+
+.bar{
+height:10px;
+background:#0f172a;
+border-radius:20px;
+overflow:hidden;
+margin-bottom:15px;
+}
+
+#progress{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#22c55e,#3b82f6);
+}
+
+.answers button{
+width:100%;
+margin:8px 0;
+padding:12px;
+border-radius:10px;
+border:1px solid #1f2937;
+background:#0f172a;
+color:white;
+cursor:pointer;
+}
+
+.correct{background:#16a34a !important;}
+.wrong{background:#dc2626 !important;}
+</style>
+</head>
+
+<body>
+
+<!-- LANDING -->
+<div id="landing" class="hero">
+<h1>MGOT</h1>
+<p>Learn. Train your mindset. Test your knowledge.</p>
+<button class="btn" onclick="startApp()">Start Quiz</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="card hidden">
+
+<div class="top">
+<div>XP: <span id="xp">0</span></div>
+<div>Question: <span id="counter">0</span></div>
+<div>Time: <span id="time">15</span></div>
+</div>
+
+<div class="bar"><div id="progress"></div></div>
+
+<h2 id="question"></h2>
+<div class="answers" id="answers"></div>
+
+</div>
+
+<!-- RESULT -->
+<div id="result" class="card hidden">
+<h2>Finished 🚀</h2>
+<p>XP: <span id="finalXp"></span></p>
+<button class="btn" onclick="location.reload()">Play Again</button>
+</div>
+
+<script>
+
+/* =========================
+   QUESTIONS (PASTE YOUR Q ARRAY HERE)
+   ========================= */
+
+const q = [
+/* 🔥 sem vlož celý tvoj existujúci array bez zmeny */
+];
+
+/* ========================= */
+
+let i=0;
+let xp=0;
+let timer;
+let game=[];
+
+function startApp(){
+document.getElementById("landing").classList.add("hidden");
+document.getElementById("quiz").classList.remove("hidden");
+
+game = q.sort(()=>Math.random()-0.5).slice(0,20);
+load();
+}
+
+function load(){
+clearInterval(timer);
+
+let t=15;
+document.getElementById("time").innerText=t;
+
+timer=setInterval(()=>{
+t--;
+document.getElementById("time").innerText=t;
+if(t<=0) next();
+},1000);
+
+let cur = game[i];
+
+document.getElementById("question").innerText = cur.q;
+document.getElementById("counter").innerText = (i+1)+"/"+game.length;
+
+document.getElementById("progress").style.width =
+((i+1)/game.length)*100+"%";
+
+let box=document.getElementById("answers");
+box.innerHTML="";
+
+cur.a.forEach((ans,idx)=>{
+let b=document.createElement("button");
+b.innerText=ans;
+
+b.onclick=()=>check(idx,b);
+
+box.appendChild(b);
+});
+}
+
+function check(idx,btn){
+clearInterval(timer);
+
+let buttons=document.querySelectorAll(".answers button");
+buttons.forEach(b=>b.disabled=true);
+
+if(idx===game[i].c){
+btn.classList.add("correct");
+xp+=10;
+document.getElementById("xp").innerText=xp;
+}else{
+btn.classList.add("wrong");
+buttons[game[i].c].classList.add("correct");
+}
+
+setTimeout(next,800);
+}
+
+function next(){
+i++;
+if(i>=game.length){
+finish();
+return;
+}
+load();
+}
+
+function finish(){
+document.getElementById("quiz").classList.add("hidden");
+document.getElementById("result").classList.remove("hidden");
+document.getElementById("finalXp").innerText=xp;
+}
+
+</script>
+
+</body>
+</html>

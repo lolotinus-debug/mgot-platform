@@ -23,6 +23,7 @@ background:var(--bg);
 color:var(--text);
 }
 
+/* ===== HEADER ===== */
 header{
 display:flex;
 justify-content:space-between;
@@ -54,6 +55,7 @@ height:70px;
 object-fit:contain;
 }
 
+/* ===== HERO ===== */
 .hero{
 text-align:center;
 padding:80px 20px;
@@ -64,7 +66,6 @@ margin:auto;
 .hero img{
 width:min(80vw,400px);
 height:auto;
-max-width:100%;
 object-fit:contain;
 margin-bottom:20px;
 filter:drop-shadow(0 0 20px #00d9ff);
@@ -94,9 +95,9 @@ text-decoration:none;
 font-weight:bold;
 color:#fff;
 background:linear-gradient(90deg,#00c3ff,#005eff);
-max-width:90%;
 }
 
+/* ===== SECTIONS ===== */
 .section-title{
 text-align:center;
 margin-top:60px;
@@ -104,7 +105,8 @@ font-size:28px;
 color:#00d9ff;
 }
 
-.grid{
+/* FIX: cards = grid */
+.grid, .cards{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
 gap:16px;
@@ -118,119 +120,57 @@ background:rgba(255,255,255,0.04);
 border:1px solid rgba(0,180,255,0.15);
 padding:20px;
 border-radius:18px;
-backdrop-filter:blur(10px);
 transition:0.4s ease;
 }
 
 .card:hover{
 transform:translateY(-5px) scale(1.02);
 border-color:#00d9ff;
-box-shadow:0 0 25px rgba(0,217,255,0.15);
 }
 
-.card h3{
-margin:0 0 10px 0;
+.card h3{color:#00d9ff;margin-top:0;}
+
+.muted{color:var(--muted);}
+
+/* ===== META HUB ===== */
+.meta{
+max-width:1100px;
+margin:40px auto;
+padding:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:16px;
+}
+
+.meta-box{
+background:rgba(0,217,255,0.06);
+border:1px solid rgba(0,217,255,0.2);
+padding:20px;
+border-radius:16px;
+}
+
+.meta-box h3{
+margin-top:0;
 color:#00d9ff;
 }
 
-.muted{
+.stat{
+font-size:22px;
+font-weight:bold;
+margin:10px 0;
+}
+
+.small{
 color:var(--muted);
-}
-
-.chart{
-max-width:1100px;
-margin:30px auto;
-padding:0 20px;
-}
-
-iframe{
-width:100%;
-height:520px;
-border:0;
-border-radius:18px;
-}
-
-.contract{
-text-align:center;
-padding:20px;
-color:#00d9ff;
-word-break:break-all;
-}
-
-.wallets{
-max-width:1100px;
-margin:0 auto;
-padding:20px;
-}
-
-.wallet{
-background:rgba(255,255,255,0.04);
-border:1px solid rgba(0,180,255,0.15);
-padding:12px;
-border-radius:12px;
-margin-bottom:10px;
-word-break:break-all;
 font-size:13px;
-transition:0.4s ease;
 }
 
-.wallet:hover{
-transform:translateY(-3px);
-border-color:#00d9ff;
-box-shadow:0 0 20px rgba(0,217,255,0.1);
-}
-
+/* ===== OTHER ===== */
 footer{
 text-align:center;
 padding:50px 20px;
 color:#667085;
 font-size:13px;
-}
-
-/* ===== ANIMATION ===== */
-.fade-in{
-opacity:0;
-transform:translateY(20px);
-transition:all 0.8s ease;
-}
-
-.fade-in.show{
-opacity:1;
-transform:translateY(0);
-}
-
-/* MOBILE OPTIMIZATION */
-@media (max-width:768px){
-
-header{
-padding:12px 16px;
-}
-
-.logo-wrap img{
-width:50px;
-height:50px;
-}
-
-.logo{
-font-size:18px;
-}
-
-.hero{
-padding:40px 15px;
-}
-
-.hero p{
-font-size:16px;
-}
-
-iframe{
-height:400px;
-}
-
-.wallet{
-font-size:12px;
-}
-
 }
 
 </style>
@@ -240,7 +180,7 @@ font-size:12px;
 
 <header>
 <div class="logo-wrap">
-<img src="logo.png" onerror="this.style.display='none'">
+<img src="logo.png">
 <div class="logo">MGOT</div>
 </div>
 
@@ -250,283 +190,100 @@ font-size:12px;
 <!-- HERO -->
 <section class="hero">
 
-<img src="logo.png" onerror="this.style.display='none'">
+<img src="logo.png">
 
 <h1>MGOT – Mindset Growth Optimization Token</h1>
 
-<p>
-MGOT is a Community Token for growing together.<br>
-Focused on mindset, personal development and collective Web3 ecosystem expansion.
-</p>
+<p>Community-driven Web3 ecosystem focused on growth, mindset and knowledge.</p>
 
-<a class="btn" href="https://dexscreener.com/solana/5dnhapu3ynmqvsbrngxy2qtpgvsziemvdcegdg5shrj9" target="_blank">Dexscreener</a>
-<a class="btn" href="https://www.geckoterminal.com/solana/pools/5dNhaPu3yNmQVSBrnGXy2QTPgvSZiemvDCEgDg5shRJ9" target="_blank">GeckoTerminal</a>
-<a class="btn" href="https://jup.ag/tokens/97aV7NrYib41PSJ3ENXaTSQicYTPc6vCVGqLdiMYsZQN" target="_blank">Jupiter</a>
-<a class="btn" href="https://www.mexc.com/dex/trade?pair_ca=5dNhaPu3yNmQVSBrnGXy2QTPgvSZiemvDCEgDg5shRJ9&chain_id=100000&token_ca=97aV7NrYib41PSJ3ENXaTSQicYTPc6vCVGqLdiMYsZQN&inviteCode=1489J" target="_blank">MEXC DEX+</a>
-<a class="btn" href="https://web3.okx.com/token/solana/97aV7NrYib41PSJ3ENXaTSQicYTPc6vCVGqLdiMYsZQN?ref=COINGECKOREF" target="_blank">OKX DEX</a>
-<a class="btn" href="https://raydium.io/liquidity/increase/?mode=add&pool_id=5dNhaPu3yNmQVSBrnGXy2QTPgvSZiemvDCEgDg5shRJ9" target="_blank">Raydium Liquidity Pool</a>
+<a class="btn" href="https://dexscreener.com/solana/5dnhapu3ynmqvsbrngxy2qtpgvsziemvdcegdg5shrj9">Dexscreener</a>
 
 </section>
 
-<!-- CONTRACT -->
-<div class="contract">
-Contract Address:<br>
-97aV7NrYib41PSJ3ENXaTSQicYTPc6vCVGqLdiMYsZQN
+<!-- META HUB -->
+<div class="section-title">⚡ MGOT META HUB</div>
+
+<div class="meta">
+
+<div class="meta-box">
+<h3>💰 Balance</h3>
+<div class="stat" id="bal">0 MGOT</div>
+<button class="btn" onclick="earn()">Earn +10 MGOT</button>
 </div>
 
-<!-- LIVE CHART -->
-<div class="section-title">Live Chart</div>
-
-<div class="chart">
-<iframe src="https://www.geckoterminal.com/solana/pools/5dNhaPu3yNmQVSBrnGXy2QTPgvSZiemvDCEgDg5shRJ9?embed=1"></iframe>
+<div class="meta-box">
+<h3>🧠 XP Level</h3>
+<div class="stat" id="xp">0 XP</div>
+<button class="btn" onclick="xpUp()">Gain XP</button>
 </div>
 
-<!-- ABOUT -->
-<div class="section-title">Strategic Vision</div>
-
-<div class="card" style="max-width:900px;margin:30px auto;text-align:center;">
-<p class="muted" style="font-size:18px;line-height:1.8;">
-MGOT is founded on the belief that long-term societal progress begins with individual development.<br><br>
-
-Our objective is to build an ecosystem that promotes education, critical thinking, personal responsibility, and continuous growth.<br><br>
-
-In the digital economy of the future, communities characterized by knowledge, discipline, and effective collaboration will possess a significant competitive advantage.<br><br>
-
-MGOT seeks to cultivate a sustainable, long-term community grounded in shared values, transparency, and active participation.<br><br>
-
-We view the token not merely as a digital asset, but as a mechanism for aligning individuals around a common vision of personal and collective advancement.<br><br>
-
-Our ambition is straightforward:<br>
-to foster an environment where better decisions lead to better outcomes—for individuals, communities, and future generations.
-</p>
-</div>
-<div class="section-title">About MGOT</div>
-
-<div class="grid">
-
-<div class="card">
-<h3>Project Overview</h3>
-<p class="muted">Community-driven Web3 ecosystem focused on long-term growth and transparency.</p>
+<div class="meta-box">
+<h3>🎯 Daily Quest</h3>
+<div class="small">Complete 1 quiz + collect reward</div>
+<button class="btn" onclick="quest()">Complete Quest</button>
 </div>
 
-<div class="card">
-<h3>Core Vision</h3>
-<p class="muted">Sustainable growth, education and ecosystem development.</p>
-</div>
-
-<div class="card">
-<h3>Transparency</h3>
-<p class="muted">All wallets and systems are verifiable on-chain.</p>
+<div class="meta-box">
+<h3>🗺️ Strategy Bonus</h3>
+<div class="small">Passive income from game</div>
+<button class="btn" onclick="bonus()">Collect</button>
 </div>
 
 </div>
 
-<!-- EDUCATION -->
-<div class="section-title">Education & Growth</div>
-
-<div class="grid">
-
-<div class="card">
-<h3>Mindset Training</h3>
-<p class="muted">Community-driven mindset, discipline & growth education for long-term builders.</p>
-</div>
-
-<div class="card">
-<h3>Web3 Learning Hub</h3>
-<p class="muted">Guides explaining DeFi, liquidity, tokens and blockchain systems.</p>
-</div>
-
-<div class="card">
-<h3>Community Learning Calls</h3>
-<p class="muted">Live sessions for holders and builders.</p>
-</div>
-
-</div>
-
-<!-- COMMUNITY ACTIVITIES -->
-<div class="section-title">Community Activities</div>
-
-<div class="grid">
-
-<div class="card">
-<h3>Weekly Challenges</h3>
-<p class="muted">Tasks, missions and engagement rewards.</p>
-</div>
-
-<div class="card">
-<h3>Contribution Rewards</h3>
-<p class="muted">Active members get rewarded for ecosystem contribution.</p>
-</div>
-
-<div class="card">
-<h3>Governance (Future DAO)</h3>
-<p class="muted">Community voting system for ecosystem decisions.</p>
-</div>
-
-</div>
-
-<!-- GAMING -->
-<div class="section-title">Gamification & Gaming</div>
-
-<div class="grid">
-
-<div class="card">
-<h3>Skill Rewards</h3>
-<p class="muted">Future skill-based earning system for users.</p>
-</div>
-
-<div class="card">
-<h3>Leaderboard</h3>
-<p class="muted">Ranking system for active community members.</p>
-</div>
-
-<div class="card">
-<h3>Mini Web3 Games</h3>
-<p class="muted">Educational blockchain-based games.</p>
-</div>
-
-</div>
-
-<!-- TRANSPARENCY -->
-<div class="section-title">Transparency & Wallets</div>
-
-<div class="wallets">
-
-<div class="wallet">LP Reserve: FGY11K1XZJUmECHiP3egmSAjdHc1zMYJEZEB5wQHnyjx</div>
-<div class="wallet">Community: 9njztfSoyXB2prATEkA675MGfNxWWL9km4n5CdM6Wbou</div>
-<div class="wallet">Vesting: EmGmjTn1QEkddEpkpQJdCNJvHD8567XvQvfYo5tUp6Gw</div>
-<div class="wallet">Treasury: 7mJyVjhaRDbtehfkG6SjhX52E4f6pwmLiLh6g7i8Efx1</div>
-<div class="wallet">Founder: 2iSaE7DsN2hZKnLU2FjSiaJSEisjQBvmmMrvJABT3FLS</div>
-<div class="wallet">Reward: 57H4CqAU2nswVoeHAMCFCVDMs12nsrsk1keSEBTXWEDq</div>
-
-</div>
-<!-- LOCKS -->
-<div class="section-title">Locks & Vesting</div>
-
-<div class="wallets">
-
-<div class="wallet">
-<strong style="color:#ffffff;">LP Reserve Lock</strong><br><br>
-<a href="https://stakepoint.app/locks/cmp2ixo520000jp04av40wdf4" target="_blank" style="color:#ffffff;">
-https://stakepoint.app/locks/cmp2ixo520000jp04av40wdf4
-</a>
-</div>
-
-<div class="wallet">
-<strong style="color:#ffffff;">Founder Lock</strong><br><br>
-<a href="https://stakepoint.app/locks/cmp2hk7jx0000l804mkasoovb" target="_blank" style="color:#ffffff;">
-https://stakepoint.app/locks/cmp2hk7jx0000l804mkasoovb
-</a>
-</div>
-
-<div class="wallet">
-<strong style="color:#ffffff;">Additional LP Locks</strong><br><br>
-
-<a href="https://stakepoint.app/locks/cmp2aj7460000ky041otmllri" target="_blank" style="color:#ffffff;">
-https://stakepoint.app/locks/cmp2aj7460000ky041otmllri
-</a><br><br>
-
-<a href="https://stakepoint.app/locks/cmp3mksm60000l204plyexr0j" target="_blank" style="color:#ffffff;">
-https://stakepoint.app/locks/cmp3mksm60000l204plyexr0j
-</a><br><br>
-
-<a href="https://stakepoint.app/locks/cmpfes8650000jl04xslu4ypt" target="_blank" style="color:#ffffff;">
-https://stakepoint.app/locks/cmpfes8650000jl04xslu4ypt
-</a>
-
-</div>
-
-<div class="wallet">
-<strong style="color:#ffffff;">Streamflow Vesting</strong><br><br>
-
-<a href="https://app.streamflow.finance/contract/solana/mainnet/BwYkA1iLu6U7EnKBfntkQ4YQJZKYnzWkzzKytEvWUBrm" target="_blank" style="color:#ffffff;">
-View Vesting Contract
-</a>
-</div>
-
-<div class="wallet">
-<strong style="color:#ffffff;">Multisig Treasury</strong><br><br>
-
-<a href="https://app.squads.so/squads/FWMCBACULR7W5oKXGhvonPKQfPzki31HYciG3htMuWsE/treasury/FWMCBACULR7W5oKXGhvonPKQfPzki31HYciG3htMuWsE" target="_blank" style="color:#ffffff;">
-View Squads Treasury
-</a>
-</div>
-
-</div>
-
-</div>
-
-<!-- COMMUNITY -->
-<div class="section-title">Community</div>
-
-<div style="text-align:center;">
-<a class="btn" href="https://t.me/MGOT_Community" target="_blank">Telegram</a>
-<a class="btn" href="https://discord.gg/zK32pzW4K" target="_blank">Discord</a>
-<a class="btn" href="https://x.com/MGOT_Community" target="_blank">X</a>
-</div>
-
-<!-- MGOT ECOSYSTEM -->
-
+<!-- ECOSYSTEM LINKS -->
 <div class="section-title">MGOT Ecosystem</div>
 
 <div class="cards">
 
 <div class="card">
-<h3>🎯 MGOT Knowledge Quiz</h3>
-
-<p>
-Test your knowledge, earn XP and improve your understanding of Web3, blockchain and the MGOT ecosystem.
-</p>
-
-<br>
-
-<a class="btn"
-href="https://lolotinus-debug.github.io/mgot-knowledge-quiz/"
-target="_blank">
-Launch Quiz
-</a>
-
+<h3>🎯 Quiz</h3>
+<p class="muted">Earn rewards via knowledge challenges.</p>
+<a class="btn" href="https://lolotinus-debug.github.io/mgot-knowledge-quiz/">Launch</a>
 </div>
 
 <div class="card">
-<h3>🏗️ MGOT Strategic Game</h3>
-
-<p>
-Build infrastructure, manage resources and grow the MGOT ecosystem through strategic decisions.
-</p>
-
-<br>
-
-<a class="btn"
-href="https://lolotinus-debug.github.io/mgot-strategic-game/"
-target="_blank">
-Launch Game
-</a>
-
+<h3>🏗️ Strategy Game</h3>
+<p class="muted">Build and expand your territory.</p>
+<a class="btn" href="https://lolotinus-debug.github.io/mgot-game/">Launch</a>
 </div>
 
 </div>
-  
+
 <footer>
-MGOT • Mindset Growth Optimization Token • Built on Solana • 2026
+MGOT Ecosystem • 2026
 </footer>
 
-<!-- ANIMATION SCRIPT -->
 <script>
-const elements = document.querySelectorAll('.card, .section-title, .wallet');
+let balance = 0;
+let xp = 0;
 
-const observer = new IntersectionObserver(entries => {
-entries.forEach(entry => {
-if(entry.isIntersecting){
-entry.target.classList.add('show');
+function update(){
+document.getElementById("bal").innerText = balance + " MGOT";
+document.getElementById("xp").innerText = xp + " XP";
 }
-});
-}, {threshold:0.1});
 
-elements.forEach(el => {
-el.classList.add('fade-in');
-observer.observe(el);
-});
+function earn(){
+balance += 10;
+update();
+}
+
+function xpUp(){
+xp += 1;
+update();
+}
+
+function quest(){
+balance += 25;
+xp += 2;
+update();
+alert("Quest completed!");
+}
+
+function bonus(){
+balance += 5;
+update();
+}
 </script>
 
 </body>

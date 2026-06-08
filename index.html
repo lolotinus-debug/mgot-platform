@@ -3,307 +3,261 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MGOT PRO Platform</title>
+<title>MGOT PRO</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif;}
-
 body{
+margin:0;
+font-family:Arial;
 background:#020617;
 color:white;
-overflow-x:hidden;
 }
 
-/* ANIMATIONS */
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(20px);}
-to{opacity:1;transform:translateY(0);}
-}
-
-@keyframes pop{
-0%{transform:scale(0.8);opacity:0;}
-100%{transform:scale(1);opacity:1;}
-}
-
-/* LOGIN */
-#login{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-animation:fadeIn .6s ease;
-}
-
-input{
-padding:12px;
-border-radius:10px;
-border:none;
-margin-top:10px;
-width:250px;
-text-align:center;
+.card{
+max-width:800px;
+margin:20px auto;
+padding:20px;
+background:#0f172a;
+border-radius:16px;
 }
 
 button{
-margin-top:15px;
-padding:12px 18px;
+padding:10px 15px;
 border:none;
 border-radius:10px;
 cursor:pointer;
 background:#22c55e;
-font-weight:800;
-transition:.2s;
+color:white;
+font-weight:bold;
+margin-top:10px;
 }
 
-button:hover{transform:scale(1.05);}
-
-/* HEADER */
-header{
-text-align:center;
-padding:20px;
-animation:fadeIn .5s ease;
-}
-
-/* GAME CARD */
-.card{
-max-width:850px;
-margin:20px auto;
-padding:20px;
-background:#0f172a;
-border-radius:18px;
-border:1px solid rgba(255,255,255,.08);
-animation:pop .4s ease;
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:10px;
+border:none;
 }
 
 .hidden{display:none;}
 
-/* TOP BAR */
 .top{
 display:flex;
 justify-content:space-between;
 gap:10px;
 flex-wrap:wrap;
-margin-bottom:10px;
 }
 
-.top div{
-background:#111827;
-padding:8px 12px;
-border-radius:10px;
-}
-
-/* PROGRESS */
-.bar{
-height:10px;
-background:#111827;
-border-radius:20px;
-overflow:hidden;
-margin-bottom:15px;
-}
-
-#progress{
-height:100%;
-width:0%;
-background:linear-gradient(90deg,#22c55e,#3b82f6);
-transition:.3s;
-}
-
-/* ANSWERS */
-.answers button{
+.answer-btn{
+display:block;
 width:100%;
-padding:12px;
-margin:6px 0;
-border-radius:10px;
-border:1px solid #1f2937;
-background:#0f172a;
-color:white;
-cursor:pointer;
-transition:.2s;
-}
-
-.answers button:hover{
-transform:scale(1.02);
-}
-
-.correct{background:#16a34a !important;}
-.wrong{background:#dc2626 !important;}
-
-/* LEADERBOARD */
-li{
-list-style:none;
-background:#111827;
-padding:10px;
-margin:6px 0;
-border-radius:10px;
-}
-
-/* BADGE */
-.badge{
 margin-top:10px;
-display:inline-block;
-padding:8px 14px;
-background:linear-gradient(45deg,#f59e0b,#facc15);
-color:#000;
-font-weight:800;
-border-radius:999px;
+padding:10px;
+background:#1e293b;
+color:white;
+border-radius:10px;
+cursor:pointer;
 }
+
+.correct{background:#22c55e !important;}
+.wrong{background:#ef4444 !important;}
 </style>
 </head>
 
 <body>
 
 <!-- LOGIN -->
-<div id="login">
-<h1>MGOT PRO</h1>
-<p>Enter your username</p>
-<input id="username" placeholder="Username">
-<button onclick="enter()">Enter</button>
+<div id="login" class="card">
+<h2>MGOT LOGIN</h2>
+<input id="username" placeholder="Enter username">
+<button onclick="login()">Enter</button>
 </div>
 
-<!-- GAME -->
-<div id="game" class="hidden">
-
-<header>
-<h2>MGOT PRO QUIZ</h2>
-<p>XP System • Leaderboard • Training Mode</p>
-</header>
-
-<div class="card">
+<!-- QUIZ -->
+<div id="quiz" class="card hidden">
 
 <div class="top">
-<div>Player: <span id="player"></span></div>
 <div>XP: <span id="xp">0</span></div>
-<div>Q: <span id="qnum">0</span></div>
+<div>Player: <span id="player"></span></div>
+<div>Q: <span id="qnum"></span></div>
 </div>
-
-<div class="bar"><div id="progress"></div></div>
 
 <h2 id="question"></h2>
-<div class="answers" id="answers"></div>
+<div id="answers"></div>
 
 </div>
 
+<!-- RESULT -->
+<div id="result" class="card hidden">
+<h2>Finished 🎉</h2>
+<p>XP: <span id="finalxp"></span></p>
+<button onclick="restart()">Restart</button>
+</div>
+
+<!-- LEADERBOARD -->
 <div class="card">
-<h3>🏆 Leaderboard</h3>
+<h2>Leaderboard</h2>
+<button onclick="loadBoard()">Refresh</button>
 <ul id="board"></ul>
-</div>
-
 </div>
 
 <script>
 
+/* ================= FIREBASE ================= */
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_BUCKET",
+  messagingSenderId: "YOUR_ID",
+  appId: "YOUR_APP"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+/* ================= USER ================= */
+let user = null;
+
+/* ================= GAME ================= */
+let i = 0;
+let xp = 0;
+
 /* ================= QUESTIONS ================= */
 const q = [
-{q:"What is MGOT focused on?",a:["Mindset growth","Gaming","Shopping","Music"],c:0},
-{q:"What does XP represent?",a:["Progress","Money","Luck","Speed"],c:0},
-{q:"MGOT is mainly about?",a:["Education","Casino","Streaming","Trading"],c:0},
-{q:"Best mindset for MGOT?",a:["Growth","Random","Passive","Lucky"],c:0},
-{q:"What improves in MGOT?",a:["Knowledge","Debt","Confusion","Noise"],c:0}
+{
+q:"What does MGOT stand for?",
+a:["Mindset Growth Optimization Token","Wrong","Wrong","Wrong"],
+c:0
+},
+{
+q:"MGOT focuses on?",
+a:["Growth & mindset","Gambling","Random stuff","Nothing"],
+c:0
+},
+{
+q:"XP means?",
+a:["Progress","Money","Luck","Time"],
+c:0
+},
+{
+q:"Goal of MGOT?",
+a:["Self improvement","Entertainment only","Loss","Chaos"],
+c:0
+}
 ];
-/* ============================================ */
 
-let user="";
-let i=0;
-let xp=0;
-let game=[];
-
-/* LOGIN */
-function enter(){
-user=document.getElementById("username").value || "Player";
+/* ================= LOGIN ================= */
+function login(){
+user = document.getElementById("username").value;
+if(!user) return;
 
 document.getElementById("login").classList.add("hidden");
-document.getElementById("game").classList.remove("hidden");
+document.getElementById("quiz").classList.remove("hidden");
 
-document.getElementById("player").innerText=user;
+document.getElementById("player").innerText = user;
 
-game = q.sort(()=>Math.random()-0.5);
-load();
-renderBoard();
+loadQ();
 }
 
-/* LOAD QUESTION */
-function load(){
-let cur = game[i];
+/* ================= LOAD QUESTION ================= */
+function loadQ(){
 
-document.getElementById("question").innerText = cur.q;
-document.getElementById("qnum").innerText = (i+1)+"/"+game.length;
-
-document.getElementById("progress").style.width =
-((i+1)/game.length)*100+"%";
-
-let box=document.getElementById("answers");
-box.innerHTML="";
-
-cur.a.forEach((a,idx)=>{
-let b=document.createElement("button");
-b.innerText=a;
-
-b.onclick=()=>check(idx,b);
-
-box.appendChild(b);
-});
-}
-
-/* CHECK */
-function check(idx,btn){
-let buttons=document.querySelectorAll(".answers button");
-buttons.forEach(b=>b.disabled=true);
-
-if(idx===game[i].c){
-btn.classList.add("correct");
-xp+=10;
-}else{
-btn.classList.add("wrong");
-buttons[game[i].c].classList.add("correct");
-}
-
-document.getElementById("xp").innerText=xp;
-
-setTimeout(next,700);
-}
-
-/* NEXT */
-function next(){
-i++;
-
-if(i>=game.length){
+if(i >= q.length){
 finish();
 return;
 }
 
-load();
+document.getElementById("qnum").innerText = (i+1)+"/"+q.length;
+
+let cur = q[i];
+document.getElementById("question").innerText = cur.q;
+
+let box = document.getElementById("answers");
+box.innerHTML = "";
+
+cur.a.forEach((ans,idx)=>{
+let b = document.createElement("button");
+b.className="answer-btn";
+b.innerText = ans;
+
+b.onclick = ()=>check(idx);
+
+box.appendChild(b);
+});
+
 }
 
-/* FINISH */
+/* ================= CHECK ANSWER ================= */
+function check(idx){
+let cur = q[i];
+let buttons = document.querySelectorAll(".answer-btn");
+
+buttons.forEach(b=>b.disabled=true);
+
+if(idx === cur.c){
+buttons[idx].classList.add("correct");
+xp += 10;
+document.getElementById("xp").innerText = xp;
+}else{
+buttons[idx].classList.add("wrong");
+buttons[cur.c].classList.add("correct");
+}
+
+setTimeout(()=>{
+i++;
+loadQ();
+},700);
+}
+
+/* ================= FINISH ================= */
 function finish(){
+document.getElementById("quiz").classList.add("hidden");
+document.getElementById("result").classList.remove("hidden");
+
+document.getElementById("finalxp").innerText = xp;
+
 save();
-alert("Quiz finished! XP: "+xp);
+}
+
+/* ================= SAVE TO FIREBASE ================= */
+function save(){
+db.collection("leaderboard").doc(user).set({
+name:user,
+xp:xp,
+time:Date.now()
+});
+
+loadBoard();
+}
+
+/* ================= LEADERBOARD ================= */
+function loadBoard(){
+db.collection("leaderboard").get().then(snap=>{
+let arr = [];
+
+snap.forEach(doc=>{
+arr.push(doc.data());
+});
+
+arr.sort((a,b)=>b.xp-a.xp);
+
+document.getElementById("board").innerHTML =
+arr.map(p=>`<li>${p.name} - ${p.xp} XP</li>`).join("");
+});
+}
+
+/* ================= RESTART ================= */
+function restart(){
 location.reload();
 }
 
-/* SAVE LEADERBOARD */
-function save(){
-let board=JSON.parse(localStorage.getItem("mgot_pro"))||[];
-
-board.push({name:user,xp:xp});
-board.sort((a,b)=>b.xp-a.xp);
-
-localStorage.setItem("mgot_pro",JSON.stringify(board));
-}
-
-/* RENDER */
-function renderBoard(){
-let board=JSON.parse(localStorage.getItem("mgot_pro"))||[];
-let list=document.getElementById("board");
-
-list.innerHTML="";
-
-board.slice(0,5).forEach(p=>{
-list.innerHTML+=`<li>${p.name} - ${p.xp} XP</li>`;
-});
-}
+/* auto load */
+loadBoard();
 
 </script>
 

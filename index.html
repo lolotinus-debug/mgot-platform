@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MGOT Platform</title>
+<title>MGOT PRO Platform</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 
@@ -13,69 +13,91 @@
 body{
 background:#020617;
 color:white;
-min-height:100vh;
 overflow-x:hidden;
 }
 
-/* HERO */
-.hero{
-text-align:center;
-padding:60px 20px;
+/* ANIMATIONS */
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(20px);}
+to{opacity:1;transform:translateY(0);}
 }
 
-.hero h1{
-font-size:3rem;
-margin-bottom:10px;
+@keyframes pop{
+0%{transform:scale(0.8);opacity:0;}
+100%{transform:scale(1);opacity:1;}
 }
 
-.hero p{
-opacity:0.8;
-margin-bottom:20px;
+/* LOGIN */
+#login{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+animation:fadeIn .6s ease;
 }
 
-.btn{
-padding:14px 22px;
+input{
+padding:12px;
+border-radius:10px;
 border:none;
-border-radius:12px;
-background:#22c55e;
-color:#000;
-font-weight:800;
+margin-top:10px;
+width:250px;
+text-align:center;
+}
+
+button{
+margin-top:15px;
+padding:12px 18px;
+border:none;
+border-radius:10px;
 cursor:pointer;
+background:#22c55e;
+font-weight:800;
 transition:.2s;
 }
 
-.btn:hover{transform:scale(1.05);}
+button:hover{transform:scale(1.05);}
 
-/* CARD */
+/* HEADER */
+header{
+text-align:center;
+padding:20px;
+animation:fadeIn .5s ease;
+}
+
+/* GAME CARD */
 .card{
-max-width:900px;
+max-width:850px;
 margin:20px auto;
-padding:25px;
-background:rgba(15,23,42,.95);
-border-radius:20px;
+padding:20px;
+background:#0f172a;
+border-radius:18px;
 border:1px solid rgba(255,255,255,.08);
+animation:pop .4s ease;
 }
 
 .hidden{display:none;}
 
-/* QUIZ */
+/* TOP BAR */
 .top{
 display:flex;
 justify-content:space-between;
-flex-wrap:wrap;
 gap:10px;
-margin-bottom:15px;
+flex-wrap:wrap;
+margin-bottom:10px;
 }
 
 .top div{
-background:#0f172a;
+background:#111827;
 padding:8px 12px;
 border-radius:10px;
 }
 
+/* PROGRESS */
 .bar{
 height:10px;
-background:#0f172a;
+background:#111827;
 border-radius:20px;
 overflow:hidden;
 margin-bottom:15px;
@@ -85,40 +107,75 @@ margin-bottom:15px;
 height:100%;
 width:0%;
 background:linear-gradient(90deg,#22c55e,#3b82f6);
+transition:.3s;
 }
 
+/* ANSWERS */
 .answers button{
 width:100%;
-margin:8px 0;
 padding:12px;
+margin:6px 0;
 border-radius:10px;
 border:1px solid #1f2937;
 background:#0f172a;
 color:white;
 cursor:pointer;
+transition:.2s;
+}
+
+.answers button:hover{
+transform:scale(1.02);
 }
 
 .correct{background:#16a34a !important;}
 .wrong{background:#dc2626 !important;}
+
+/* LEADERBOARD */
+li{
+list-style:none;
+background:#111827;
+padding:10px;
+margin:6px 0;
+border-radius:10px;
+}
+
+/* BADGE */
+.badge{
+margin-top:10px;
+display:inline-block;
+padding:8px 14px;
+background:linear-gradient(45deg,#f59e0b,#facc15);
+color:#000;
+font-weight:800;
+border-radius:999px;
+}
 </style>
 </head>
 
 <body>
 
-<!-- LANDING -->
-<div id="landing" class="hero">
-<h1>MGOT</h1>
-<p>Learn. Train your mindset. Test your knowledge.</p>
-<button class="btn" onclick="startApp()">Start Quiz</button>
+<!-- LOGIN -->
+<div id="login">
+<h1>MGOT PRO</h1>
+<p>Enter your username</p>
+<input id="username" placeholder="Username">
+<button onclick="enter()">Enter</button>
 </div>
 
-<!-- QUIZ -->
-<div id="quiz" class="card hidden">
+<!-- GAME -->
+<div id="game" class="hidden">
+
+<header>
+<h2>MGOT PRO QUIZ</h2>
+<p>XP System • Leaderboard • Training Mode</p>
+</header>
+
+<div class="card">
 
 <div class="top">
+<div>Player: <span id="player"></span></div>
 <div>XP: <span id="xp">0</span></div>
-<div>Question: <span id="counter">0</span></div>
-<div>Time: <span id="time">15</span></div>
+<div>Q: <span id="qnum">0</span></div>
 </div>
 
 <div class="bar"><div id="progress"></div></div>
@@ -128,54 +185,50 @@ cursor:pointer;
 
 </div>
 
-<!-- RESULT -->
-<div id="result" class="card hidden">
-<h2>Finished 🚀</h2>
-<p>XP: <span id="finalXp"></span></p>
-<button class="btn" onclick="location.reload()">Play Again</button>
+<div class="card">
+<h3>🏆 Leaderboard</h3>
+<ul id="board"></ul>
+</div>
+
 </div>
 
 <script>
 
-/* =========================
-   QUESTIONS (PASTE YOUR Q ARRAY HERE)
-   ========================= */
-
+/* ================= QUESTIONS ================= */
 const q = [
-/* 🔥 sem vlož celý tvoj existujúci array bez zmeny */
+{q:"What is MGOT focused on?",a:["Mindset growth","Gaming","Shopping","Music"],c:0},
+{q:"What does XP represent?",a:["Progress","Money","Luck","Speed"],c:0},
+{q:"MGOT is mainly about?",a:["Education","Casino","Streaming","Trading"],c:0},
+{q:"Best mindset for MGOT?",a:["Growth","Random","Passive","Lucky"],c:0},
+{q:"What improves in MGOT?",a:["Knowledge","Debt","Confusion","Noise"],c:0}
 ];
+/* ============================================ */
 
-/* ========================= */
-
+let user="";
 let i=0;
 let xp=0;
-let timer;
 let game=[];
 
-function startApp(){
-document.getElementById("landing").classList.add("hidden");
-document.getElementById("quiz").classList.remove("hidden");
+/* LOGIN */
+function enter(){
+user=document.getElementById("username").value || "Player";
 
-game = q.sort(()=>Math.random()-0.5).slice(0,20);
+document.getElementById("login").classList.add("hidden");
+document.getElementById("game").classList.remove("hidden");
+
+document.getElementById("player").innerText=user;
+
+game = q.sort(()=>Math.random()-0.5);
 load();
+renderBoard();
 }
 
+/* LOAD QUESTION */
 function load(){
-clearInterval(timer);
-
-let t=15;
-document.getElementById("time").innerText=t;
-
-timer=setInterval(()=>{
-t--;
-document.getElementById("time").innerText=t;
-if(t<=0) next();
-},1000);
-
 let cur = game[i];
 
 document.getElementById("question").innerText = cur.q;
-document.getElementById("counter").innerText = (i+1)+"/"+game.length;
+document.getElementById("qnum").innerText = (i+1)+"/"+game.length;
 
 document.getElementById("progress").style.width =
 ((i+1)/game.length)*100+"%";
@@ -183,9 +236,9 @@ document.getElementById("progress").style.width =
 let box=document.getElementById("answers");
 box.innerHTML="";
 
-cur.a.forEach((ans,idx)=>{
+cur.a.forEach((a,idx)=>{
 let b=document.createElement("button");
-b.innerText=ans;
+b.innerText=a;
 
 b.onclick=()=>check(idx,b);
 
@@ -193,37 +246,63 @@ box.appendChild(b);
 });
 }
 
+/* CHECK */
 function check(idx,btn){
-clearInterval(timer);
-
 let buttons=document.querySelectorAll(".answers button");
 buttons.forEach(b=>b.disabled=true);
 
 if(idx===game[i].c){
 btn.classList.add("correct");
 xp+=10;
-document.getElementById("xp").innerText=xp;
 }else{
 btn.classList.add("wrong");
 buttons[game[i].c].classList.add("correct");
 }
 
-setTimeout(next,800);
+document.getElementById("xp").innerText=xp;
+
+setTimeout(next,700);
 }
 
+/* NEXT */
 function next(){
 i++;
+
 if(i>=game.length){
 finish();
 return;
 }
+
 load();
 }
 
+/* FINISH */
 function finish(){
-document.getElementById("quiz").classList.add("hidden");
-document.getElementById("result").classList.remove("hidden");
-document.getElementById("finalXp").innerText=xp;
+save();
+alert("Quiz finished! XP: "+xp);
+location.reload();
+}
+
+/* SAVE LEADERBOARD */
+function save(){
+let board=JSON.parse(localStorage.getItem("mgot_pro"))||[];
+
+board.push({name:user,xp:xp});
+board.sort((a,b)=>b.xp-a.xp);
+
+localStorage.setItem("mgot_pro",JSON.stringify(board));
+}
+
+/* RENDER */
+function renderBoard(){
+let board=JSON.parse(localStorage.getItem("mgot_pro"))||[];
+let list=document.getElementById("board");
+
+list.innerHTML="";
+
+board.slice(0,5).forEach(p=>{
+list.innerHTML+=`<li>${p.name} - ${p.xp} XP</li>`;
+});
 }
 
 </script>

@@ -613,12 +613,15 @@ observer.observe(el);
 
 <!-- ================= MGOT META HUB LOGIC ================= -->
 <script>
-let balance = 0;
-let xp = 0;
+let balance = parseInt(localStorage.getItem("mgot_balance")) || 0;
+let xp = parseInt(localStorage.getItem("mgot_xp")) || 0;
 
 function update(){
 document.getElementById("bal").innerText = balance + " MGOT";
 document.getElementById("xp").innerText = xp + " XP";
+
+localStorage.setItem("mgot_balance", balance);
+localStorage.setItem("mgot_xp", xp);
 }
 
 function earn(){

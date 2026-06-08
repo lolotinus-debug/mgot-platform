@@ -556,6 +556,74 @@ elements.forEach(el => {
 el.classList.add('fade-in');
 observer.observe(el);
 });
+
+<!-- ================= MGOT META HUB ================= -->
+<div class="section-title">⚡ MGOT META HUB</div>
+
+<div class="meta">
+
+<div class="meta-box">
+<h3>💰 Balance</h3>
+<div class="stat" id="bal">0 MGOT</div>
+<button class="btn" onclick="earn()">Earn +10 MGOT</button>
+</div>
+
+<div class="meta-box">
+<h3>🧠 XP Level</h3>
+<div class="stat" id="xp">0 XP</div>
+<button class="btn" onclick="xpUp()">Gain XP</button>
+</div>
+
+<div class="meta-box">
+<h3>🎯 Daily Quest</h3>
+<div class="small">Complete quiz or tasks for rewards</div>
+<button class="btn" onclick="quest()">Complete Quest</button>
+</div>
+
+<div class="meta-box">
+<h3>🗺️ Strategy Bonus</h3>
+<div class="small">Collect passive income from MGOT game</div>
+<button class="btn" onclick="bonus()">Collect</button>
+</div>
+
+</div>
+
+<!-- ================= SCRIPT ================= -->
+<script>
+let balance = 0;
+let xp = 0;
+
+function update(){
+document.getElementById("bal").innerText = balance + " MGOT";
+document.getElementById("xp").innerText = xp + " XP";
+}
+
+function earn(){
+balance += 10;
+update();
+}
+
+function xpUp(){
+xp += 1;
+update();
+}
+
+function quest(){
+balance += 25;
+xp += 2;
+update();
+alert("Quest completed!");
+}
+
+function bonus(){
+balance += 5;
+update();
+}
+
+update();
+</script>
+
+  
 </script>
 
 </body>
